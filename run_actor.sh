@@ -9,4 +9,4 @@ python train_drq.py "$@" \
     --encoder_type resnet-pretrained \
     --debug \
     --actor_queue_size=500 \
-    --num_envs=10
+    --num_envs=50

@@ -68,7 +68,7 @@ conda activate vectorized_serl
 
 ### 2. Install JAX with GPU Support
 ```bash
-pip install --upgrade "jax[cuda12_pip]==0.4.35" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+pip install -U "jax[cuda12]"
 ```
 
 ### 3. Install Core Dependencies
@@ -86,17 +86,10 @@ pip install -e .
 cd ../submodules/diff-plane-rasterization
 pip install -e .
 
+cd ..
+git clone https://github.com/facebookresearch/pytorch3d.git
 cd ../pytorch3d
 pip install -e .
-```
-
-### 4. Verify Installation
-```bash
-# Test vectorized environment
-python test_vectorized_env.py
-
-# Test mobile robot environment  
-python test_mobile_robot_vectorized.py
 ```
 
 ## Quick Start
@@ -112,18 +105,6 @@ python train_drq.py --learner --ip=localhost
 
 ### Vectorized Training with Multiple Environments
 ```bash
-# Train actor with 4 parallel environments
-python train_drq.py --actor --num_envs=4 --ip=localhost
-
-# Train actor with 10 parallel environments (faster data collection)
-python train_drq.py --actor --num_envs=10 --ip=localhost
-
-# Train learner (unchanged)
-python train_drq.py --learner --ip=localhost
-```
-
-### Using Convenience Scripts
-```bash
 # Start learner
 ./run_learner.sh
 
@@ -134,35 +115,11 @@ python train_drq.py --learner --ip=localhost
 ./run_eval.sh
 ```
 
-## Vectorized Environment Usage
-
-### Configuration
-The vectorized environment support is controlled by the `--num_envs` flag:
-
-```bash
-# Single environment (original behavior)
-python train_drq.py --actor --num_envs=1
-
-# 4 parallel environments
-python train_drq.py --actor --num_envs=4
-
-# 10 parallel environments (recommended for fast data collection)
-python train_drq.py --actor --num_envs=10
-```
-
 ### Implementation Details
 - Uses `gymnasium.vector.SyncVectorEnv` for reliable parallel execution
 - Automatic batching of observations and actions
 - Compatible with existing SERL agents and replay buffers
 - Supports all observation types (RGB, state, depth)
-
-### Performance Benefits
-```python
-# Example: Training time comparison
-# Single environment: ~100 it/s
-# 4 environments:     ~400 it/s  (4x speedup)
-# 10 environments:    ~1000 it/s (10x speedup)
-```
 
 ### Code Example
 ```python
