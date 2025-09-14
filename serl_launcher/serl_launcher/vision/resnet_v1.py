@@ -213,6 +213,7 @@ class ResNetEncoder(nn.Module):
         train: bool = True,
         cond_var=None,
         stop_gradient=False,
+        encode: bool = True,
     ):
         # put inputs in [-1, 1]
         # x = observations.astype(jnp.float32) / 127.5 - 1.0

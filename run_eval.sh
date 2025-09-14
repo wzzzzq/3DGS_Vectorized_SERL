@@ -8,4 +8,4 @@ python eval_policy.py \
     --env PiperMobileRobot-v0 \
     --num_episodes 10 \
     --render \
-    --encoder_type resnet-pretrained
+    --encoder_type small

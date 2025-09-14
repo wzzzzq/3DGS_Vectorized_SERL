@@ -16,7 +16,7 @@ class SmallEncoder(nn.Module):
     spatial_block_size: Optional[int] = 8
 
     @nn.compact
-    def __call__(self, observations: jnp.ndarray, train=False) -> jnp.ndarray:
+    def __call__(self, observations: jnp.ndarray, train=False, encode=True) -> jnp.ndarray:
         assert len(self.features) == len(self.strides)
 
         x = observations.astype(jnp.float32) / 255.0

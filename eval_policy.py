@@ -29,34 +29,26 @@ def main(_):
     else:
         env = gym.make(FLAGS.env)
     
-    # Apply same transformations as training
+    # Apply same transformations as training (dual camera setup)
     from gymnasium.wrappers import TransformObservation
     
     def transform_obs(obs):
         new_obs = obs.copy()
         if 'rgb' in new_obs:
             new_obs['front'] = new_obs.pop('rgb')
+        # Keep wrist_rgb as is - it's already correctly named
         return new_obs
     
     # Get the observation space after transformation
     sample_obs = env.observation_space.sample()
     transformed_sample = transform_obs(sample_obs)
     
-    # Create new observation space
+    # Create new observation space (should include front, wrist_rgb, state)
     from gymnasium import spaces
     new_obs_space = spaces.Dict({
-        key: env.observation_space[orig_key] if key == 'state' 
-             else env.observation_space['rgb'] if key == 'front'
-             else space
-        for key, space in [(k, env.observation_space[k] if k in env.observation_space else v) 
-                          for k, v in {'front': None, 'state': None}.items()]
-        for orig_key in ['rgb', 'state'] if orig_key in env.observation_space
-    })
-    
-    # Properly construct the new observation space
-    new_obs_space = spaces.Dict({
-        'front': env.observation_space['rgb'],
-        'state': env.observation_space['state']
+        'front': env.observation_space['rgb'],  # Renamed from rgb
+        'wrist_rgb': env.observation_space['wrist_rgb'],  # Keep as is
+        'state': env.observation_space['state']  # Keep as is
     })
     
     env = TransformObservation(env, transform_obs, new_obs_space)

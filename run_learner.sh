@@ -6,10 +6,12 @@ python train_drq.py "$@" \
     --env=PiperMobileRobot-v0 \
     --exp_name=serl_dev_mobile_robot_test \
     --seed 0 \
-    --training_starts 300 \
+    --max_steps 10000000 \
+    --training_starts 100 \
+    --replay_buffer_capacity 50000 \
     --critic_actor_ratio 2 \
-    --encoder_type  resnet-pretrained\
+    --encoder_type  small \
     --batch_size 32 \
-    --checkpoint_period 100000 \
+    --checkpoint_period 1000000 \
     --checkpoint_path $(pwd)/checkpoints \
     --debug

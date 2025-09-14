@@ -63,7 +63,7 @@ class PiperEnv(gym.Env):
         # Mixed observation space: dict with 'rgb' (camera) and 'state' (proprioceptive)
         self.observation_space = spaces.Dict({
             'rgb': spaces.Box(low=0, high=255, shape=(self.camera_height, self.camera_width, 3), dtype=np.uint8),
-            # 'wrist_rgb': spaces.Box(low=0, high=255, shape=(self.camera_height, self.camera_width, 3), dtype=np.uint8),
+            'wrist_rgb': spaces.Box(low=0, high=255, shape=(self.camera_height, self.camera_width, 3), dtype=np.uint8),
             'state': spaces.Box(low=-np.inf, high=np.inf, shape=(7,), dtype=np.float32)
         })
 
@@ -228,7 +228,7 @@ class PiperEnv(gym.Env):
     def map_action_to_joint_deltas(self, action: np.ndarray) -> np.ndarray:
         """Map [-1, 1] action to joint angle increments."""
         max_delta_per_step = np.array([
-            0.05, 0.03, 0.03, 0.03, 0.03, 0.05, 0.005
+            0.15, 0.10, 0.10, 0.10, 0.10, 0.15, 0.01
         ], dtype=np.float32)
         
         # Ensure action is a numpy array with proper dtype
@@ -447,7 +447,7 @@ class PiperEnv(gym.Env):
         state_obs = self._get_state_observation()
         if self.gs_render:
             gs_obs_3rd = self.get_img("3rd")
-            # gs_obs_wrist = self.get_img("wrist_cam_left")
+            gs_obs_wrist = self.get_img("wrist_cam_left")
             # RGB -> BGR
             bgr_img = cv2.cvtColor(gs_obs_3rd, cv2.COLOR_RGB2BGR)
 
@@ -456,15 +456,15 @@ class PiperEnv(gym.Env):
 
             return {
                 'rgb': gs_obs_3rd,
-                # 'wrist_rgb': gs_obs_wrist,
+                'wrist_rgb': gs_obs_wrist,
                 'state': state_obs
             }
         else:
             rgb_obs_3rd = self._get_rgb_observation("3rd")
-            # rgb_obs_wrist = self._get_rgb_observation("wrist_cam_left")
+            rgb_obs_wrist = self._get_rgb_observation("wrist_cam_left")
             return {
                 'rgb': rgb_obs_3rd,
-                # 'wrist_rgb': rgb_obs_wrist,
+                'wrist_rgb': rgb_obs_wrist,
                 'state': state_obs
             }
 

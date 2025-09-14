@@ -23,7 +23,7 @@ class MobileNetEncoder(nn.Module):
     spatial_block_size: Optional[int] = 8
 
     @nn.compact
-    def __call__(self, x: jnp.ndarray, train=False) -> jnp.ndarray:
+    def __call__(self, x: jnp.ndarray, train=False, encode=True) -> jnp.ndarray:
         """
         encode an image using the mobilenet encoder
 
